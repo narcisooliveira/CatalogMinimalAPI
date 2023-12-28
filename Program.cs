@@ -61,6 +61,8 @@ app.MapGet("/produtos", async (CatalogContext context) => await context.Produtos
 app.MapGet("/produtos/{id}", async (CatalogContext context, int id) =>
 {
     IResult result = await context.Produtos.FindAsync(id) is Produto product ? Results.Ok(product) : Results.NotFound();
+
+    return result;
 });
 
 app.MapPost("/produtos", async (CatalogContext context, Produto product) =>
@@ -80,7 +82,15 @@ app.MapPut("/produtos/{id}", async (CatalogContext context, int id, Produto prod
     if (existingProduct is null)
         return Results.NotFound();
 
-    context.Entry(product).State = EntityState.Modified;
+    existingProduct.Id = product.Id;
+    existingProduct.Nome = product.Nome;
+    existingProduct.Descricao = product.Descricao;
+    existingProduct.Preco = product.Preco;
+    existingProduct.ImagemUrl = product.ImagemUrl;
+    existingProduct.DataCompra = existingProduct.DataCompra;
+    existingProduct.Quantidade = product.Quantidade;
+    existingProduct.CategoriaId = product.CategoriaId;
+    
     await context.SaveChangesAsync();
     return Results.Ok(product);
 });
