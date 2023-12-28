@@ -89,9 +89,7 @@ app.MapDelete("/produtos/{id}", async (CatalogContext context, int id) =>
 {
     var product = await context.Produtos.FindAsync(id);
     if (product == null)
-    {
         return Results.NotFound();
-    }
 
     context.Produtos.Remove(product);
     await context.SaveChangesAsync();
