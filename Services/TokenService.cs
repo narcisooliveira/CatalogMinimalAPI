@@ -13,8 +13,8 @@ namespace CatalogMinimalAPI.Services
             var header = new JwtHeader(credentials);
             var payload = new JwtPayload(issuer, audience, null, DateTime.Now, DateTime.Now.AddMinutes(expireMinutes));
             var token = new JwtSecurityToken(header, payload);
-            
-            return new JwtSecurityTokenHandler().WriteToken(token);           
+
+            return new JwtSecurityTokenHandler().WriteToken(token);               
         }
     }
 }

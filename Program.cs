@@ -4,13 +4,43 @@ using CatalogMinimalAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "apiCatalogo", Version = "v1" });
+
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "JWT Authorization header using the Bearer scheme." + 
+                   "\r\n\r\n Enter 'Bearer'[space] and then your token in the text input below." +
+                    "\r\n\r\nExample: \"Bearer 12345abcdef\"",
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                          new OpenApiSecurityScheme
+                          {
+                              Reference = new OpenApiReference
+                              {
+                                  Type = ReferenceType.SecurityScheme,
+                                  Id = "Bearer"
+                              }
+                          },
+                         Array.Empty<string>()
+                    }
+                });
+});
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -52,13 +82,13 @@ app.MapPost("/login", [AllowAnonymous] (User user, ITokenService tokenService) =
     var token = tokenService.GenerateToken(app.Configuration["Jwt:Key"], app.Configuration["Jwt:Issuer"], app.Configuration["Jwt:Audience"]);
     
     return Results.Ok(new { token });
-});
+}).WithTags("Authentication");
 
 // Define the endpoints of the API
 app.MapGet("/", () => "Catalog API - 2023").ExcludeFromDescription();
 
 // Endpoints of categorias
-app.MapGet("/categorias", async (CatalogContext context) => await context.Categorias.ToListAsync()).RequireAuthorization();
+app.MapGet("/categorias", async (CatalogContext context) => await context.Categorias.ToListAsync()).RequireAuthorization().WithTags("Categorias");
 
 app.MapGet("/categorias/{id}", async (CatalogContext context, int id) =>
 {
@@ -96,7 +126,7 @@ app.MapDelete("/categorias/{id}", async (CatalogContext context, int id) =>
 });
 
 // Endpoints of produtos
-app.MapGet("/produtos", async (CatalogContext context) => await context.Produtos.ToListAsync()).RequireAuthorization();
+app.MapGet("/produtos", async (CatalogContext context) => await context.Produtos.ToListAsync()).RequireAuthorization().WithTags("Produtos");
 
 app.MapGet("/produtos/{id}", async (CatalogContext context, int id) =>
 {
