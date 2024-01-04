@@ -1,4 +1,6 @@
 ﻿using CatalogMinimalAPI.Context;
+using CatalogMinimalAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CatalogMinimalAPI.Endpoints
 {
