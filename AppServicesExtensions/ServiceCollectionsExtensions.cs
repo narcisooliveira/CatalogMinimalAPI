@@ -24,11 +24,11 @@ namespace CatalogMinimalAPI.AppServicesExtensions
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "apiCatalogo", Version = "v1" });
 
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme()
                 {
                     Name = "Authorization",
                     Type = SecuritySchemeType.ApiKey,
-                    Scheme = "Bearer",
+                    Scheme = JwtBearerDefaults.AuthenticationScheme,
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
                     Description = "JWT Authorization header using the Bearer scheme." +
@@ -70,6 +70,7 @@ namespace CatalogMinimalAPI.AppServicesExtensions
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
+                    options.RequireHttpsMetadata = false;
                     options.Authority = builder.Configuration["Jwt:Issuer"];
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
