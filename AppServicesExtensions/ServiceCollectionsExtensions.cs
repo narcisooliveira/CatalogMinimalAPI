@@ -43,7 +43,7 @@ namespace CatalogMinimalAPI.AppServicesExtensions
                               Reference = new OpenApiReference
                               {
                                   Type = ReferenceType.SecurityScheme,
-                                  Id = "Bearer"
+                                  Id = JwtBearerDefaults.AuthenticationScheme
                               }
                           },
                          Array.Empty<string>()

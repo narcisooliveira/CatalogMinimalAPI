@@ -11,14 +11,14 @@ namespace CatalogMinimalAPI.Endpoints
             // Endpoints of authentication
             app.MapPost("/login", [AllowAnonymous] (User user, ITokenService tokenService) =>
             {
-                if (user.Nome is null || user.Senha is null)
+                if (user.Name is null || user.Password is null)
                     return Results.BadRequest("Login inválido!");
 
 
-                if (user.Nome != "narciso" || user.Senha != "p@ssWord")
+                if (user.Name != "narciso" || user.Password != "p@ssWord")
                     return Results.Unauthorized();
 
-                var token = tokenService.GenerateToken(app.Configuration["Jwt:Key"], app.Configuration["Jwt:Issuer"], app.Configuration["Jwt:Audience"]);
+                var token = tokenService.GenerateToken(app.Configuration["Jwt:Key"], app.Configuration["Jwt:Issuer"], app.Configuration["Jwt:Audience"], user);
 
                 return Results.Ok(new { token });
             }).WithTags("Authentication");
