@@ -5,8 +5,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddApiSwager()
        .AddPersistence()
-       .Services.AddCors()
-       .AddAuthentication();
+       .Services.AddCors();
+builder.AddAuthenticationJwt();
 
 // Configure the HTTP request pipeline. 
 var app = builder.Build();
