@@ -23,7 +23,7 @@
         public static IApplicationBuilder UseSwaggerMiddleware(this IApplicationBuilder app)
         {
             app.UseSwagger();
-            app.UseSwaggerUI(p => p.SwaggerEndpoint("/swagger/v1/swagger.json", "CatalogMinimalAPI v1"));
+            app.UseSwaggerUI(p => { });
             return app;
         }
     }

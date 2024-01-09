@@ -21,7 +21,9 @@ namespace CatalogMinimalAPI.Endpoints
                 var token = tokenService.GenerateToken(app.Configuration["Jwt:Key"], app.Configuration["Jwt:Issuer"], app.Configuration["Jwt:Audience"], user);
 
                 return Results.Ok(new { token });
-            }).WithTags("Authentication");
+            }).Produces(StatusCodes.Status400BadRequest)
+                .Produces(StatusCodes.Status200OK)
+                .WithTags("Authentication");
         }
     }
 }

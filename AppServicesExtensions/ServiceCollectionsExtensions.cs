@@ -71,7 +71,6 @@ namespace CatalogMinimalAPI.AppServicesExtensions
                 .AddJwtBearer(options =>
                 {
                     options.RequireHttpsMetadata = false;
-                    options.Authority = builder.Configuration["Jwt:Issuer"];
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
