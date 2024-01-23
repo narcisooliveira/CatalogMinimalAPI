@@ -16,14 +16,14 @@ namespace CatalogMinimalAPI.Endpoints
                 IResult result = await context.Categorias.FindAsync(id) is Categoria category ? Results.Ok(category) : Results.NotFound();
 
                 return result;
-            });
+            }).WithTags("Categorias"); ;
 
             app.MapPost("/categorias", async (CatalogContext context, Categoria category) =>
             {
                 await context.Categorias.AddAsync(category);
                 await context.SaveChangesAsync();
                 return Results.Created($"/categorias/{category.Id}", category);
-            });
+            }).WithTags("Categorias"); ;
 
             app.MapPut("/categorias/{id}", async (CatalogContext context, int id, Categoria category) =>
             {
@@ -33,7 +33,7 @@ namespace CatalogMinimalAPI.Endpoints
                 context.Entry(category).State = EntityState.Modified;
                 await context.SaveChangesAsync();
                 return Results.Ok(category);
-            });
+            }).WithTags("Categorias"); ;
 
             app.MapDelete("/categorias/{id}", async (CatalogContext context, int id) =>
             {
@@ -44,7 +44,7 @@ namespace CatalogMinimalAPI.Endpoints
                 context.Categorias.Remove(category);
                 await context.SaveChangesAsync();
                 return Results.NoContent();
-            });
+            }).WithTags("Categorias"); ;
         }
 
     }

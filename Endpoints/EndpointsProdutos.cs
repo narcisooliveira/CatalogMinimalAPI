@@ -16,14 +16,15 @@ namespace CatalogMinimalAPI.Endpoints
                 IResult result = await context.Produtos.FindAsync(id) is Produto product ? Results.Ok(product) : Results.NotFound();
 
                 return result;
-            });
+            }).WithTags("Produtos");
 
             app.MapPost("/produtos", async (CatalogContext context, Produto product) =>
             {
                 await context.Produtos.AddAsync(product);
                 await context.SaveChangesAsync();
+
                 return Results.Created($"/produtos/{product.Id}", product);
-            });
+            }).WithTags("Produtos");
 
             app.MapPut("/produtos/{id}", async (CatalogContext context, int id, Produto product) =>
             {
@@ -32,19 +33,22 @@ namespace CatalogMinimalAPI.Endpoints
 
                 context.Entry(product).State = EntityState.Modified;
                 await context.SaveChangesAsync();
+
                 return Results.Ok(product);
-            });
+            }).WithTags("Produtos");
 
             app.MapDelete("/produtos/{id}", async (CatalogContext context, int id) =>
             {
                 var product = await context.Produtos.FindAsync(id);
+
                 if (product is null)
                     return Results.NotFound();
 
                 context.Produtos.Remove(product);
                 await context.SaveChangesAsync();
+
                 return Results.NoContent();
-            });
+            }).WithTags("Produtos");
         }
     }
 }
